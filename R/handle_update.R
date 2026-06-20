@@ -3,7 +3,7 @@
 #' Orchestrates the update process: checks if update is needed,
 #' processes data, writes output, and stores the new checksum.
 #'
-#' @importFrom opentimeseries write_open_ts is_update_needed update_checksum
+#' @importFrom opentimeseries is_update_needed update_checksum
 #' @export
 handle_update <- function(key = key) {
 
@@ -18,9 +18,9 @@ handle_update <- function(key = key) {
   # that returns the most recent version of a time series
   # from its original provider
   # Store checksum after successful update
-  upd <- update_checksum(checksum)
+  upd <- update_checksum(checksum_input)
   if(upd){
-    process_data("kofbarometer", ids = c("barometer"))
+    process_data(key=key)
   } else {
     message("Checksum initialized. Data untouched.")
   }
@@ -40,7 +40,7 @@ handle_update <- function(key = key) {
 generate_checksum_input <- function(key = key){
   # need to include user via session
   set_config(api_key = key)
-  sample_key <- "one.key.in.dataset"
+  sample_key <- "ch.seco.css.q.index.na.i62_index"
   ts <- read_ts(ts_keys = sample_key)
   return(ts)
 }
